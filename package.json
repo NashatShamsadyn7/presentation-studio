@@ -1,0 +1,33 @@
+{
+  "name": "presentation-studio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3210",
+    "build": "next build",
+    "start": "next start",
+    "check": "tsc --noEmit && tsx scripts/check-core.ts && tsx scripts/check-icons.ts && tsx scripts/check-export.ts",
+    "check:live": "tsx scripts/check-tools.ts",
+    "preview": "npx serve out -l 3400",
+    "deploy": "npm run check && next build && firebase deploy --only hosting"
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "jszip": "^3.10.1",
+    "katex": "^0.18.1",
+    "next": "16.3.0",
+    "pptxgenjs": "^4.0.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/katex": "^0.16.8",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "lucide-static": "^1.28.0",
+    "tsx": "^4.23.6",
+    "typescript": "^5"
+  }
+}

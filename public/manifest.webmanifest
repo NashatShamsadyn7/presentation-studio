@@ -1,0 +1,22 @@
+{
+  "name": "ستودیۆی پێشکەشکردن",
+  "short_name": "پێشکەشکردن",
+  "description": "دروستکەری پێشکەشکردنی ئەکادیمی بە AI — کوردی، عەرەبی، ئینگلیزی",
+  "lang": "ckb",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#EEF1F6",
+  "theme_color": "#3B5BDB",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

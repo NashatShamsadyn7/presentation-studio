@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لاپەڕەی سەرەتا — پێشبینین</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#171d2b; --panel2:#1e2637; --line:#2b3549;
+    --txt:#e8ecf4; --muted:#93a0b8; --accent:#4f8ef7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font-family:'Segoe UI','Noto Naskh Arabic',Tahoma,Arial,sans-serif;
+       display:flex;height:100vh;overflow:hidden}
+
+  /* ---------- کۆنترۆڵ پانێل ---------- */
+  .panel{width:360px;flex:0 0 360px;background:var(--panel);border-inline-start:1px solid var(--line);
+         padding:20px;overflow-y:auto}
+  .panel h1{font-size:17px;margin:0 0 4px}
+  .panel .sub{font-size:12px;color:var(--muted);margin:0 0 18px}
+  .fld{margin-bottom:13px}
+  .fld label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+  .fld input,.fld select{width:100%;padding:8px 10px;border-radius:7px;border:1px solid var(--line);
+        background:var(--panel2);color:var(--txt);font-size:13px;font-family:inherit}
+  .fld input:focus,.fld select:focus{outline:none;border-color:var(--accent)}
+  .row{display:flex;gap:8px}
+  .row .fld{flex:1}
+  .sec{font-size:11px;color:var(--accent);letter-spacing:.5px;margin:20px 0 10px;
+       padding-bottom:6px;border-bottom:1px solid var(--line)}
+  #students .fld{margin-bottom:8px}
+  .note{font-size:11px;color:var(--muted);line-height:1.7;background:var(--panel2);
+        padding:10px;border-radius:7px;margin-top:16px;border:1px solid var(--line)}
+
+  /* ---------- ستەیج ---------- */
+  .stageWrap{flex:1;display:flex;align-items:center;justify-content:center;padding:24px;min-width:0}
+  .fit{position:relative}
+  .stage{width:1920px;height:1080px;position:relative;overflow:hidden;
+         background:#DFE4EA;transform-origin:top right;
+         font-family:Georgia,'Times New Roman',serif;color:#000;
+         box-shadow:0 24px 70px rgba(0,0,0,.55);direction:ltr}
+
+  /* خەفەتی نەرم لە پشتەوە */
+  .stage::before{content:'';position:absolute;inset:0;
+    background:
+      radial-gradient(120% 90% at 12% 8%,  rgba(255,255,255,.95), transparent 55%),
+      radial-gradient(90%  80% at 88% 92%, rgba(255,255,255,.75), transparent 60%),
+      radial-gradient(60%  55% at 52% 52%, rgba(140,158,185,.30), transparent 70%);}
+
+  .deco{position:absolute;border-radius:50%;filter:blur(.4px)}
+  .deco.sq{border-radius:44px}
+
+  /* کارتی شووشەیی */
+  .card{position:absolute;left:154.5px;top:136.4px;width:1596.6px;height:859.5px;
+        border-radius:52px;background:rgba(255,255,255,.42);
+        backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+        border:1.5px solid rgba(255,255,255,.62);
+        box-shadow:0 18px 60px rgba(80,95,125,.18), inset 0 1px 0 rgba(255,255,255,.7)}
+
+  .t{position:absolute;white-space:pre;line-height:1.16;padding:0 14.4px}
+  #uni1 {left:255.4px; top:202.3px; font-size:44px}
+  #uni2 {left:255.4px; top:262.1px; font-size:44px}
+  #dept {left:255.4px; top:321.9px; font-size:44px}
+  #title{left:0; top:484.5px; width:1920px; text-align:center;
+         font-size:56px; font-weight:700; font-style:italic}
+  #prep {left:211.2px; top:646.5px; font-size:56px; font-style:italic}
+  .stu  {font-size:44px; font-style:italic}
+  #teach{left:1212.8px; top:794.3px; font-size:56px}
+  #year {left:1212.8px; top:872px;  font-size:44px}
+
+  #logo{position:absolute;left:1368px;top:154.2px;width:342.9px;height:342.9px;
+        object-fit:contain}
+  #logo:not([src]),#logo[src=""]{display:none}
+</style>
+</head>
+<body>
+
+<div class="stageWrap"><div class="fit"><div class="stage" id="stage">
+  <!-- ڕازاندنەوە: بازنە شین + چوارگۆشەی زەرد -->
+  <div class="deco"    style="left:43.4px;  top:548.4px; width:168px;   height:168px;   background:#8FA0D2; opacity:.85"></div>
+  <div class="deco"    style="left:365.5px; top:113.6px; width:173.8px; height:173.8px; background:#9BAAD8; opacity:.55"></div>
+  <div class="deco"    style="left:1679.3px;top:112.2px; width:156.5px; height:156.5px; background:#5C77BC; opacity:.9"></div>
+  <div class="deco sq" style="left:67.1px;  top:771.6px; width:311.1px; height:310.1px; background:#EFC45E; opacity:.92; transform:rotate(-14deg)"></div>
+  <div class="deco sq" style="left:1165px;  top:74px;    width:318.7px; height:318.7px; background:#F0C863; opacity:.85; transform:rotate(12deg)"></div>
+  <div class="deco sq" style="left:1049.6px;top:906.2px; width:193.9px; height:193.9px; background:#EFC45E; opacity:.9;  transform:rotate(-8deg)"></div>
+  <div class="deco sq" style="left:1659.6px;top:871.9px; width:157.5px; height:157.5px; background:#F0C863; opacity:.88; transform:rotate(18deg)"></div>
+
+  <div class="card"></div>
+
+  <img id="logo" alt="">
+  <div class="t" id="uni1">Akre University for Applied Sciences</div>
+  <div class="t" id="uni2">Bardarash Technical Institute</div>
+  <div class="t" id="dept">Department of IT</div>
+  <div class="t" id="title">Running Key Cipher</div>
+  <div class="t" id="prep">Prepared:</div>
+  <div id="stuWrap"></div>
+  <div class="t" id="teach">Mr. Sami H. Ismael</div>
+  <div class="t" id="year">2024 – 2025</div>
+</div></div></div>
+
+<!-- ---------- پانێل ---------- -->
+<aside class="panel">
+  <h1>لاپەڕەی سەرەتا</h1>
+  <p class="sub">١٩٢٠ × ١٠٨٠ — وێنەی ڕاستەقینەی دیزاینەکەت</p>
+
+  <div class="sec">زانیاری زانکۆ</div>
+  <div class="fld"><label>ناوی زانکۆ</label><input id="i_uni1" value="Akre University for Applied Sciences"></div>
+  <div class="fld"><label>ناوی پەیمانگا</label><input id="i_uni2" value="Bardarash Technical Institute"></div>
+  <div class="fld"><label>بەش</label><input id="i_dept" value="Department of IT"></div>
+  <div class="fld"><label>لۆگۆ</label><input id="i_logo" type="file" accept="image/*"></div>
+
+  <div class="sec">پێشکەشکردن</div>
+  <div class="fld"><label>ناونیشان</label><input id="i_title" value="Running Key Cipher"></div>
+  <div class="fld"><label>ساڵی خوێندن</label><input id="i_year" value="2024 – 2025"></div>
+
+  <div class="sec">خوێندکاران</div>
+  <div class="fld"><label>ژمارەی خوێندکاران</label>
+    <select id="i_count">
+      <option>1</option><option>2</option><option selected>3</option>
+      <option>4</option><option>5</option><option>6</option>
+    </select>
+  </div>
+  <div id="students"></div>
+
+  <div class="sec">مامۆستا</div>
+  <div class="row">
+    <div class="fld" style="flex:0 0 110px"><label>پلە</label>
+      <select id="i_pre"><option>Mr.</option><option>Mrs.</option><option>Ms.</option>
+        <option>Dr.</option><option>Prof.</option><option>Assist. Lect.</option></select>
+    </div>
+    <div class="fld"><label>ناو</label><input id="i_teach" value="Sami H. Ismael"></div>
+  </div>
+
+  <div class="note">
+    ئەم لاپەڕەیە ڕێک لەسەر پێوانەکانی فایلی <b>Running Key1.pptx</b> دروستکراوە:
+    فۆنتی Georgia، کارتی شووشەیی <b>#DFE4EA</b>، و هەمان شوێنی هەموو دەقەکان.
+    <br><br>
+    <b>زیادکراو:</b> «بەش» و «ساڵی خوێندن» — لە فایلەکەی یەکەمدا نەبوون،
+    بەڵام لە <b>hard disk 27.pptx</b> دا هەن.
+  </div>
+</aside>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* --- خوێندکاران: هەر ناوێک کەمێک بەرەو ڕاست و خوارەوە دەچێت (وەک دیزاینەکەت) --- */
+const S = {x0:236.5, y0:735.0, dx:35.2, dy:56.8};
+let names = ['Ali Masoud','Salah Sadeeq','Nashat Shamsadyn','','',''];
+
+function renderStudents(){
+  const n = +$('i_count').value;
+  $('students').innerHTML = '';
+  $('stuWrap').innerHTML  = '';
+  for(let i=0;i<n;i++){
+    const f = document.createElement('div');
+    f.className = 'fld';
+    f.innerHTML = `<label>خوێندکاری ${i+1}</label><input value="${names[i]||''}">`;
+    const inp = f.querySelector('input');
+    inp.oninput = e => { names[i] = e.target.value; drawStudents(); };
+    $('students').appendChild(f);
+  }
+  drawStudents();
+}
+
+function drawStudents(){
+  const n = +$('i_count').value;
+  $('stuWrap').innerHTML = '';
+  for(let i=0;i<n;i++){
+    const d = document.createElement('div');
+    d.className = 't stu';
+    d.style.left = (S.x0 + S.dx*i) + 'px';
+    d.style.top  = (S.y0 + S.dy*i) + 'px';
+    d.textContent = `${i+1}- ${names[i]||''}`;
+    $('stuWrap').appendChild(d);
+  }
+}
+
+/* --- بەستنەوەی خانەکان بە لاپەڕەکەوە --- */
+const bind = (from,to) => $(from).oninput = e => $(to).textContent = e.target.value;
+bind('i_uni1','uni1'); bind('i_uni2','uni2'); bind('i_dept','dept');
+bind('i_title','title'); bind('i_year','year');
+
+const teach = () => $('teach').textContent = `${$('i_pre').value} ${$('i_teach').value}`;
+$('i_pre').onchange = teach;  $('i_teach').oninput = teach;
+$('i_count').onchange = renderStudents;
+
+$('i_logo').onchange = e => {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ev => $('logo').src = ev.target.result;
+  r.readAsDataURL(f);
+};
+
+/* --- گونجاندنی قەبارە لەگەڵ پەنجەرەکە --- */
+function fit(){
+  const w = innerWidth - 360 - 48, h = innerHeight - 48;
+  const s = Math.min(w/1920, h/1080);
+  const st = $('stage');
+  st.style.transform = `scale(${s})`;
+  st.parentElement.style.width  = (1920*s)+'px';
+  st.parentElement.style.height = (1080*s)+'px';
+}
+addEventListener('resize', fit);
+renderStudents(); fit();
+</script>
+</body>
+</html>
