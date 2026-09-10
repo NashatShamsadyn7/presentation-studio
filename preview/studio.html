@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ستودیۆی پێشکەشکردن</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════ ١. تێمی سلایدەکان ═══════════════ */
+:root{
+  --slide-bg:#DFE4EA; --ink:#0A0A0A; --ink-soft:#4A5568;
+  --glass:rgba(255,255,255,.42); --glass-line:rgba(255,255,255,.62);
+  --pri:#5C77BC; --pri-soft:#8FA0D2; --acc:#EFC45E;
+  --serif:Georgia,'Times New Roman',serif;
+
+  /* ─── ڕەنگی ڕووکاری وێبسایتەکە ─── */
+  --app-bg:#EEF1F6;  --surface:#FFFFFF;  --surface-2:#F7F9FC;
+  --line:#E1E6EE;    --line-2:#D3DAE6;
+  --tx:#141A24;      --tx-2:#5A6679;     --tx-3:#8A94A6;
+  --brand:#3B5BDB;   --brand-soft:#E8EDFD;
+  --r:12px; --r-lg:16px;
+  --sh-1:0 1px 2px rgba(20,26,36,.05);
+  --sh-2:0 4px 14px rgba(20,26,36,.07);
+  --sh-3:0 18px 48px rgba(20,26,36,.16);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--app-bg);color:var(--tx);
+     font-family:'Vazirmatn','Segoe UI','Noto Naskh Arabic',Tahoma,sans-serif;
+     font-size:14px;overflow:hidden;display:flex;flex-direction:column}
+
+/* ═══════════════ ٢. سەرەوە ═══════════════ */
+header{height:58px;flex:0 0 58px;background:var(--surface);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;
+  padding:0 18px;gap:14px;box-shadow:var(--sh-1);z-index:20}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.brand .mk{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--brand),#6B8AFD);color:#fff;font-size:15px}
+.dot{width:1px;height:24px;background:var(--line-2)}
+.crumb{color:var(--tx-2);font-size:13px}
+.spacer{flex:1}
+.btn{height:36px;padding:0 15px;border-radius:10px;border:1px solid var(--line-2);
+  background:var(--surface);color:var(--tx);font-family:inherit;font-size:13px;
+  font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+  transition:.14s}
+.btn:hover{background:var(--surface-2);border-color:#B9C3D4}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.pri:hover{background:#2F4CC4}
+.btn svg{width:15px;height:15px}
+
+/* ═══════════════ ٣. شێوەی گشتی ═══════════════ */
+main{flex:1;display:flex;min-height:0}
+
+/* ── لیستی سلایدەکان (ڕاست) ── */
+.rail{width:186px;flex:0 0 186px;background:var(--surface);
+  border-inline-start:1px solid var(--line);overflow-y:auto;padding:14px 12px}
+.rail .lbl{font-size:11px;font-weight:600;color:var(--tx-3);letter-spacing:.4px;
+  margin:0 2px 10px;display:flex;justify-content:space-between;align-items:center}
+.thumb{position:relative;margin-bottom:9px;border-radius:9px;overflow:hidden;
+  border:2px solid transparent;cursor:pointer;background:var(--surface-2);transition:.14s}
+.thumb:hover{border-color:var(--line-2)}
+.thumb.on{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.thumb .n{position:absolute;top:5px;inset-inline-start:6px;z-index:2;
+  background:rgba(10,14,22,.55);color:#fff;font-size:10px;font-weight:600;
+  width:18px;height:18px;border-radius:5px;display:grid;place-items:center}
+.thumb svg{display:block;width:100%;height:auto;background:var(--slide-bg)}
+.thumb .cap{padding:6px 8px;font-size:11px;color:var(--tx-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ── کانڤاس (ناوەڕاست) ── */
+.canvas{flex:1;min-width:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:26px;position:relative;
+  background:
+    radial-gradient(60% 60% at 50% 40%,#F6F8FC,transparent 70%),
+    var(--app-bg)}
+.fit{position:relative;border-radius:14px;overflow:hidden;box-shadow:var(--sh-3)}
+.stage{width:1920px;height:1080px;position:relative;overflow:hidden;
+  background:var(--slide-bg);transform-origin:top right;
+  font-family:var(--serif);color:var(--ink);direction:ltr}
+.stage::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(120% 90% at 12% 8%,  rgba(255,255,255,.95),transparent 55%),
+    radial-gradient(90%  80% at 88% 92%, rgba(255,255,255,.72),transparent 60%),
+    radial-gradient(60%  55% at 52% 52%, rgba(140,158,185,.28),transparent 70%)}
+.zoom{position:absolute;bottom:18px;inset-inline-start:22px;display:flex;
+  align-items:center;gap:4px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:4px;box-shadow:var(--sh-2)}
+.zoom button{width:28px;height:28px;border:none;background:none;border-radius:7px;
+  cursor:pointer;color:var(--tx-2);font-size:15px}
+.zoom button:hover{background:var(--surface-2)}
+.zoom span{font-size:12px;color:var(--tx-2);min-width:42px;text-align:center}
+
+/* ── ئینسپێکتەر (چەپ) ── */
+.insp{width:308px;flex:0 0 308px;background:var(--surface);
+  border-inline-end:1px solid var(--line);display:flex;flex-direction:column}
+.tabs{display:flex;padding:12px 12px 0;gap:4px}
+.tab{flex:1;height:34px;border:none;background:none;border-radius:9px;cursor:pointer;
+  font-family:inherit;font-size:12.5px;font-weight:600;color:var(--tx-2);transition:.14s}
+.tab:hover{background:var(--surface-2)}
+.tab.on{background:var(--brand-soft);color:var(--brand)}
+.pane{flex:1;overflow-y:auto;padding:16px 14px 26px;display:none}
+.pane.on{display:block}
+.grp{font-size:11px;font-weight:600;color:var(--tx-3);letter-spacing:.4px;
+  margin:4px 2px 10px}
+.grp:not(:first-child){margin-top:22px}
+
+/* گەلەری تەختەبەند */
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.lay-card{border:1.5px solid var(--line);border-radius:10px;overflow:hidden;
+  cursor:pointer;background:var(--surface);transition:.14s;padding:0}
+.lay-card:hover{border-color:#B9C3D4;transform:translateY(-1px);box-shadow:var(--sh-2)}
+.lay-card.on{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.lay-card svg{display:block;width:100%;height:auto;background:#F1F4F9}
+.lay-card .nm{padding:6px 7px;font-size:11px;font-weight:500;color:var(--tx-2);
+  text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* پاشبنەماکان */
+.th-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.th-card{border:1.5px solid var(--line);border-radius:10px;cursor:pointer;
+  overflow:hidden;background:var(--surface);transition:.14s}
+.th-card:hover{border-color:#B9C3D4;transform:translateY(-1px);box-shadow:var(--sh-2)}
+.th-card.on{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.th-prev{height:52px;position:relative}
+.th-prev i{position:absolute;border-radius:50%;display:block}
+.th-card .nm{padding:6px 7px;font-size:11px;color:var(--tx-2);text-align:center;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* خانەکان */
+.f{margin-bottom:12px}
+.f label{display:block;font-size:12px;color:var(--tx-2);margin-bottom:5px;font-weight:500}
+.f input,.f select,.f textarea{width:100%;padding:8px 11px;border-radius:9px;
+  border:1.5px solid var(--line);background:var(--surface);color:var(--tx);
+  font-size:13px;font-family:inherit;transition:.14s}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--brand);
+  box-shadow:0 0 0 3px var(--brand-soft)}
+.f textarea{resize:vertical;min-height:76px;line-height:1.6}
+.row{display:flex;gap:8px} .row .f{flex:1}
+.hint{font-size:11.5px;color:var(--tx-3);line-height:1.75;background:var(--surface-2);
+  border:1px solid var(--line);border-radius:10px;padding:10px 11px;margin-top:14px}
+.hint b{color:var(--tx-2)}
+
+/* ═══════════════ ٤. ناوەڕۆکی سلایدەکان ═══════════════ */
+.card{position:absolute;left:154.5px;top:136.4px;width:1596.6px;height:859.5px;
+  border-radius:52px;background:var(--glass);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border:1.5px solid var(--glass-line);
+  box-shadow:0 18px 60px rgba(80,95,125,.18),inset 0 1px 0 rgba(255,255,255,.7)}
+.deco{position:absolute;border-radius:50%}
+.deco.sq{border-radius:44px}
+
+.lay{position:absolute;left:154.5px;top:136.4px;width:1596.6px;height:859.5px;
+  padding:62px 76px;display:none}
+.lay.on{display:block}
+.h2{font-size:62px;font-weight:700;font-style:italic;margin:0 0 10px;line-height:1.1}
+.rule{width:148px;height:7px;background:var(--acc);border-radius:4px;margin-bottom:32px}
+.body{height:calc(100% - 128px)}
+
+ul.pts{margin:0;padding:0;list-style:none;font-size:35px;line-height:1.5}
+ul.pts li{margin-bottom:25px;padding-inline-start:42px;position:relative}
+ul.pts li::before{content:'';position:absolute;inset-inline-start:0;top:17px;
+  width:17px;height:17px;border-radius:50%;background:var(--pri)}
+
+ol.outline{margin:0;padding:0;list-style:none;counter-reset:o;font-size:37px;
+  line-height:1.45;columns:2;column-gap:66px}
+ol.outline li{counter-increment:o;margin-bottom:29px;padding-inline-start:80px;
+  position:relative;break-inside:avoid}
+ol.outline li::before{content:counter(o);position:absolute;inset-inline-start:0;top:-4px;
+  width:56px;height:56px;border-radius:50%;background:var(--pri);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:29px;font-weight:700}
+
+.split{display:flex;gap:54px;height:100%}
+.split .txt{flex:1;min-width:0}
+.split .media{flex:0 0 545px}
+.imgBox{width:100%;height:100%;border-radius:32px;overflow:hidden;position:relative;
+  background:linear-gradient(135deg,#C9D4E4,#E8EDF4 55%,#DFE7F0);
+  border:1.5px solid rgba(255,255,255,.75);box-shadow:0 14px 40px rgba(80,95,125,.2);
+  display:flex;align-items:center;justify-content:center}
+.imgBox span{font-family:'Vazirmatn',sans-serif;font-size:18px;color:#6C7F9C;letter-spacing:.5px}
+
+.hero{position:absolute;inset:0;border-radius:52px;overflow:hidden}
+.hero .bgimg{position:absolute;inset:0;
+  background:linear-gradient(135deg,#2F4260,var(--pri) 60%,var(--pri-soft))}
+.hero .veil{position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(12,20,34,.84) 0%,rgba(12,20,34,.55) 46%,rgba(12,20,34,.06) 100%)}
+.hero .inner{position:absolute;inset:0;padding:92px 88px;color:#fff;display:flex;
+  flex-direction:column;justify-content:center;width:64%}
+.hero .h2{color:#fff;font-size:70px}
+.hero p{font-size:33px;line-height:1.55;margin:0}
+
+.cols{display:flex;gap:50px;height:100%}
+.col{flex:1;background:rgba(255,255,255,.5);border:1.5px solid rgba(255,255,255,.8);
+  border-radius:28px;padding:38px 36px}
+.col h3{font-size:39px;margin:0 0 8px;font-style:italic}
+.col .bar{width:86px;height:6px;border-radius:3px;margin-bottom:22px}
+.col p{font-size:29px;line-height:1.5;margin:0}
+
+/* هەنگاوە ژمارەکراوەکان */
+.steps{display:flex;gap:26px;height:100%;align-items:stretch}
+.step{flex:1;background:rgba(255,255,255,.52);border:1.5px solid rgba(255,255,255,.8);
+  border-radius:26px;padding:32px 26px;position:relative}
+.step .num{width:64px;height:64px;border-radius:19px;background:var(--pri);color:#fff;
+  display:grid;place-items:center;font-size:32px;font-weight:700;margin-bottom:20px}
+.step h4{font-size:31px;margin:0 0 10px;font-style:italic}
+.step p{font-size:24px;line-height:1.45;margin:0;color:var(--ink-soft)}
+
+/* هێڵی کات */
+.tl{position:relative;height:100%;display:flex;align-items:center}
+.tl .line{position:absolute;left:40px;right:40px;top:50%;height:6px;
+  background:var(--pri-soft);border-radius:3px}
+.tl .items{display:flex;width:100%;position:relative}
+.tl .it{flex:1;text-align:center;position:relative}
+.tl .it .d{width:42px;height:42px;border-radius:50%;background:var(--pri);
+  border:7px solid var(--slide-bg);margin:0 auto}
+.tl .it .y{font-size:34px;font-weight:700;margin-top:16px}
+.tl .it .c{font-size:24px;line-height:1.4;margin-top:6px;color:var(--ink-soft);padding:0 14px}
+.tl .it:nth-child(even) .d{background:var(--acc)}
+
+/* خشتە */
+table.tb{width:100%;border-collapse:separate;border-spacing:0;font-size:30px}
+table.tb th{background:var(--pri);color:#fff;padding:22px 26px;text-align:left;
+  font-weight:700;font-style:italic}
+table.tb th:first-child{border-start-start-radius:20px}
+table.tb th:last-child{border-start-end-radius:20px}
+table.tb td{padding:20px 26px;background:rgba(255,255,255,.55);
+  border-bottom:1.5px solid rgba(255,255,255,.9)}
+table.tb tr:last-child td:first-child{border-end-start-radius:20px}
+table.tb tr:last-child td:last-child{border-end-end-radius:20px}
+
+/* ئامارە گەورەکان */
+.kpis{display:flex;gap:34px;height:100%;align-items:center}
+.kpi{flex:1;text-align:center;background:rgba(255,255,255,.5);
+  border:1.5px solid rgba(255,255,255,.8);border-radius:28px;padding:44px 22px}
+.kpi .v{font-size:96px;font-weight:700;line-height:1;color:var(--pri)}
+.kpi .v small{font-size:44px}
+.kpi .k{font-size:27px;margin-top:16px;color:var(--ink-soft);line-height:1.35}
+
+/* وتە */
+.quote{height:100%;display:flex;flex-direction:column;justify-content:center;
+  padding:0 70px;position:relative}
+.quote .mk{font-size:210px;line-height:.6;color:var(--acc);opacity:.55;
+  font-family:Georgia,serif}
+.quote p{font-size:48px;line-height:1.45;font-style:italic;margin:6px 0 26px}
+.quote .by{font-size:29px;color:var(--ink-soft)}
+.quote .by::before{content:'— '}
+
+/* تۆڕی وێنە */
+.grid4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  gap:22px;height:100%}
+
+/* بەشکەر */
+.divider{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center}
+.divider .big{font-size:190px;font-weight:700;line-height:1;color:var(--pri);opacity:.28}
+.divider h2{font-size:78px;font-style:italic;margin:-46px 0 0}
+.divider .rule{margin:26px auto 0}
+
+/* سوپاس */
+.thanks{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center}
+.thanks .q{font-size:52px;font-style:italic;color:var(--ink-soft)}
+.thanks .t{font-size:132px;font-weight:700;font-style:italic;line-height:1.05;margin:14px 0 0}
+.thanks .rule{margin:30px auto 0}
+
+/* سەرچاوەکان */
+ol.refs{margin:0;padding:0;list-style:none;counter-reset:r;font-size:25px;line-height:1.55}
+ol.refs li{counter-increment:r;margin-bottom:20px;padding-inline-start:52px;position:relative}
+ol.refs li::before{content:'[' counter(r) ']';position:absolute;inset-inline-start:0;
+  font-weight:700;color:var(--pri)}
+ol.refs .src{color:var(--ink-soft);font-style:italic}
+
+/* ── دەقی درێژ ── */
+.lead{font-size:39px;line-height:1.45;margin:0 0 26px;font-style:italic}
+.prose{font-size:32px;line-height:1.62;margin:0;text-align:justify}
+.prose b{color:var(--pri)}
+
+/* ── سێ ستوون ── */
+.three{display:flex;gap:32px;height:100%}
+.three .c{flex:1;background:rgba(255,255,255,.5);border:1.5px solid rgba(255,255,255,.8);
+  border-radius:26px;padding:34px 30px}
+.three .c .ic{width:68px;height:68px;border-radius:21px;background:var(--pri);color:#fff;
+  display:grid;place-items:center;font-size:31px;font-weight:700;margin-bottom:20px}
+.three .c h4{font-size:32px;margin:0 0 12px;font-style:italic}
+.three .c p{font-size:24px;line-height:1.45;margin:0;color:var(--ink-soft)}
+
+/* ── پێناسە ── */
+.def{height:100%;display:flex;flex-direction:column;justify-content:center}
+.def .term{font-size:90px;font-weight:700;font-style:italic;line-height:1.05}
+.def .pron{font-size:29px;color:var(--ink-soft);margin-top:10px;font-style:italic}
+.def .desc{font-size:35px;line-height:1.55;margin-top:32px;padding-inline-start:32px;
+  border-inline-start:8px solid var(--acc)}
+
+/* ── فۆرموول / کۆد ── */
+.code{background:rgba(255,255,255,.62);border:1.5px solid rgba(255,255,255,.92);
+  border-radius:26px;padding:34px 40px;font-family:'Consolas','Courier New',monospace;
+  font-size:31px;line-height:1.8}
+.code .k{color:var(--pri);font-weight:700}
+.code .c2{color:var(--ink-soft)}
+.formula{text-align:center;font-size:60px;margin:28px 0 0;font-family:Georgia,serif;font-style:italic}
+
+/* ── باش و خراپ ── */
+.pc{display:flex;gap:42px;height:100%}
+.pc .side{flex:1;border-radius:28px;padding:34px 32px;background:rgba(255,255,255,.5);
+  border:1.5px solid rgba(255,255,255,.8)}
+.pc h4{font-size:36px;margin:0 0 22px;font-style:italic;display:flex;align-items:center;gap:14px}
+.pc h4 .b{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+  color:#fff;font-size:25px}
+.pc ul{margin:0;padding:0;list-style:none;font-size:27px;line-height:1.45}
+.pc li{margin-bottom:18px;padding-inline-start:38px;position:relative}
+.pc li::before{position:absolute;inset-inline-start:0;font-weight:700;font-size:30px}
+.pc .good li::before{content:'✓';color:#3F8A5F}
+.pc .bad  li::before{content:'✕';color:#A8434B}
+
+/* ── سوڕ ── */
+.cycle{height:100%;display:grid;place-items:center}
+.cycle .ring{width:420px;height:420px;border-radius:50%;
+  border:13px dashed var(--pri-soft);position:relative}
+.cycle .nd{position:absolute;width:158px;height:158px;border-radius:50%;background:var(--pri);
+  color:#fff;display:grid;place-items:center;text-align:center;font-size:23px;line-height:1.25;
+  padding:12px;border:7px solid var(--slide-bg)}
+.cycle .nd.a{background:var(--acc);color:#141414}
+.cycle .n1{top:-92px;left:50%;transform:translateX(-50%)}
+.cycle .n2{right:-92px;top:50%;transform:translateY(-50%)}
+.cycle .n3{bottom:-92px;left:50%;transform:translateX(-50%)}
+.cycle .n4{left:-92px;top:50%;transform:translateY(-50%)}
+
+/* ── هەرەم ── */
+.pyr{height:100%;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:14px}
+.pyr .lv{display:grid;place-items:center;color:#fff;font-size:31px;font-weight:700;
+  height:112px;border-radius:16px;font-style:italic}
+
+/* ── ڤێن ── */
+.venn{height:100%;position:relative;display:grid;place-items:center}
+.venn .cc{position:absolute;width:410px;height:410px;border-radius:50%;
+  display:grid;place-items:center;font-size:31px;font-weight:700;text-align:center;
+  mix-blend-mode:multiply;padding:0 60px;line-height:1.3}
+.venn .mid{position:absolute;font-size:26px;font-weight:700;color:#fff;z-index:3}
+
+/* ── خشتەی جوڵە ── */
+.flow{display:flex;align-items:center;height:100%}
+.flow .bx{flex:1;background:rgba(255,255,255,.56);border:2.5px solid var(--pri);
+  border-radius:22px;padding:26px 18px;text-align:center;font-size:26px;line-height:1.35}
+.flow .bx b{display:block;font-size:20px;color:var(--pri);margin-bottom:8px;letter-spacing:.5px}
+.flow .ar{flex:0 0 54px;text-align:center;font-size:44px;color:var(--pri)}
+
+/* ── بەراورد ── */
+table.cmp{width:100%;border-collapse:separate;border-spacing:0;font-size:29px}
+table.cmp th{background:var(--pri);color:#fff;padding:20px 24px;font-style:italic;text-align:left}
+table.cmp th:first-child{border-start-start-radius:20px}
+table.cmp th:last-child{border-start-end-radius:20px}
+table.cmp td{padding:18px 24px;background:rgba(255,255,255,.55);
+  border-bottom:1.5px solid rgba(255,255,255,.9);text-align:center}
+table.cmp td:first-child{text-align:left;font-weight:700}
+table.cmp .y{color:#3F8A5F;font-weight:700} table.cmp .n{color:#A8434B;font-weight:700}
+
+/* ── ڕستەی سەرەکی ── */
+.state{height:100%;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:0 50px}
+.state p{font-size:64px;line-height:1.35;font-style:italic;margin:0}
+.state b{color:var(--pri)}
+
+/* ── تیم ── */
+.team{display:flex;gap:44px;height:100%;align-items:center;justify-content:center}
+.team .m{text-align:center}
+.team .av{width:186px;height:186px;border-radius:50%;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--pri),var(--pri-soft));display:grid;place-items:center;
+  color:#fff;font-size:60px;font-weight:700;font-family:Georgia,serif;
+  border:6px solid rgba(255,255,255,.72)}
+.team .nm2{font-size:30px;font-weight:700}
+.team .rl{font-size:23px;color:var(--ink-soft);margin-top:6px}
+
+/* ── پێوەر ── */
+.bars2{height:100%;display:flex;flex-direction:column;justify-content:center;gap:36px}
+.bars2 .lbl2{display:flex;justify-content:space-between;font-size:30px;margin-bottom:13px}
+.bars2 .track{height:28px;border-radius:14px;background:rgba(255,255,255,.68);overflow:hidden}
+.bars2 .fillb{height:100%;border-radius:14px;background:var(--pri)}
+.bars2 .r:nth-child(even) .fillb{background:var(--acc)}
+
+/* ── تۆڕی تایبەتمەندی ── */
+.feat{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;
+  gap:22px;height:100%}
+.feat .f2{background:rgba(255,255,255,.5);border:1.5px solid rgba(255,255,255,.8);
+  border-radius:24px;padding:26px 24px}
+.feat .f2 .ic2{width:56px;height:56px;border-radius:17px;background:var(--acc);
+  display:grid;place-items:center;font-size:25px;font-weight:700;margin-bottom:15px;color:#141414}
+.feat .f2 h5{font-size:28px;margin:0 0 8px;font-style:italic}
+.feat .f2 p{font-size:21px;line-height:1.4;margin:0;color:var(--ink-soft)}
+
+/* ── پێش و پاش ── */
+.ba{display:flex;height:100%;border-radius:28px;overflow:hidden;
+  border:1.5px solid rgba(255,255,255,.85)}
+.ba .h{flex:1;padding:38px 34px;background:rgba(255,255,255,.52)}
+.ba .h.aft{background:var(--pri);color:#fff}
+.ba .h .tg{display:inline-block;font-size:21px;letter-spacing:1px;padding:6px 16px;
+  border-radius:20px;background:rgba(0,0,0,.09);margin-bottom:20px}
+.ba .h.aft .tg{background:rgba(255,255,255,.22)}
+.ba .h h4{font-size:36px;margin:0 0 16px;font-style:italic}
+.ba .h p{font-size:26px;line-height:1.5;margin:0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><div class="mk">P</div><span>ستودیۆی پێشکەشکردن</span></div>
+  <div class="dot"></div>
+  <div class="crumb" id="crumb">Running Key Cipher — ١٦ سلاید</div>
+  <div class="spacer"></div>
+  <button class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>PDF</button>
+  <button class="btn pri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>PowerPoint</button>
+</header>
+
+<main>
+  <!-- ═══ لیستی سلایدەکان ═══ -->
+  <nav class="rail">
+    <div class="lbl"><span>سلایدەکان</span><span id="cnt"></span></div>
+    <div id="thumbs"></div>
+  </nav>
+
+  <!-- ═══ کانڤاس ═══ -->
+  <div class="canvas">
+    <div class="fit"><div class="stage" id="stage">
+      <div class="deco"    style="left:43.4px;  top:548.4px; width:168px;   height:168px;   background:var(--pri-soft); opacity:.85"></div>
+      <div class="deco"    style="left:1679.3px;top:112.2px; width:156.5px; height:156.5px; background:var(--pri); opacity:.9"></div>
+      <div class="deco sq" style="left:67.1px;  top:771.6px; width:311.1px; height:310.1px; background:var(--acc); opacity:.92; transform:rotate(-14deg)"></div>
+      <div class="deco sq" style="left:1165px;  top:74px;    width:318.7px; height:318.7px; background:var(--acc); opacity:.85; transform:rotate(12deg)"></div>
+      <div class="deco sq" style="left:1659.6px;top:871.9px; width:157.5px; height:157.5px; background:var(--acc); opacity:.88; transform:rotate(18deg)"></div>
+      <div class="card" id="glassCard"></div>
+
+      <!-- ١ ناوەڕۆک -->
+      <div class="lay on" id="L_outline">
+        <div class="h2">Outline</div><div class="rule"></div>
+        <div class="body"><ol class="outline">
+          <li>Introduction to Running Key Cipher</li>
+          <li>Why is it called “Running”?</li>
+          <li>Key Features and Security</li>
+          <li>Encryption Method</li>
+          <li>Decryption Method</li>
+          <li>Modern Relevance</li>
+        </ol></div>
+      </div>
+
+      <!-- ٢ خاڵ + وێنە -->
+      <div class="lay" id="L_bullets">
+        <div class="h2">Key Features</div><div class="rule"></div>
+        <div class="body"><div class="split">
+          <div class="txt"><ul class="pts">
+            <li><b>High Security:</b> the key text is long and hard to guess.</li>
+            <li><b>Ease of Use:</b> any ordinary paragraph can serve as a key.</li>
+            <li><b>Complexity:</b> an unknown key makes decryption near impossible.</li>
+          </ul></div>
+          <div class="media"><div class="imgBox"><span>AI IMAGE</span></div></div>
+        </div></div>
+      </div>
+
+      <!-- ٣ چارتی ستوونی -->
+      <div class="lay" id="L_bar">
+        <div class="h2">Security Comparison</div><div class="rule"></div>
+        <div class="body"><svg viewBox="0 0 1420 540" width="100%" height="100%" font-family="Georgia,serif">
+          <g stroke="#B9C4D4" stroke-width="1.5">
+            <line x1="120" y1="460" x2="1390" y2="460"/>
+            <line x1="120" y1="345" x2="1390" y2="345" stroke-dasharray="7 9" opacity=".5"/>
+            <line x1="120" y1="230" x2="1390" y2="230" stroke-dasharray="7 9" opacity=".5"/>
+            <line x1="120" y1="115" x2="1390" y2="115" stroke-dasharray="7 9" opacity=".5"/>
+          </g>
+          <g fill="#5B6A83" font-size="23" text-anchor="end">
+            <text x="100" y="468">0</text><text x="100" y="353">25</text>
+            <text x="100" y="238">50</text><text x="100" y="123">75</text>
+          </g>
+          <g class="bars">
+            <rect x="200" y="322" width="170" height="138" rx="12" fill="var(--pri-soft)"/>
+            <rect x="470" y="266" width="170" height="194" rx="12" fill="var(--pri)"/>
+            <rect x="740" y="138" width="170" height="322" rx="12" fill="var(--acc)"/>
+            <rect x="1010" y="82" width="170" height="378" rx="12" fill="var(--pri)"/>
+          </g>
+          <g fill="var(--ink)" font-size="26" text-anchor="middle">
+            <text x="285" y="500">Caesar</text><text x="555" y="500">Vigenère</text>
+            <text x="825" y="500">Running Key</text><text x="1095" y="500">One-Time Pad</text>
+          </g>
+          <g fill="var(--ink)" font-size="25" font-weight="bold" text-anchor="middle">
+            <text x="285" y="304">30</text><text x="555" y="248">42</text>
+            <text x="825" y="120">70</text><text x="1095" y="64">82</text>
+          </g>
+        </svg></div>
+      </div>
+
+      <!-- ٤ چارتی بازنەیی -->
+      <div class="lay" id="L_donut">
+        <div class="h2">Usage Today</div><div class="rule"></div>
+        <div class="body" style="display:flex;align-items:center;gap:70px">
+          <svg viewBox="0 0 300 300" width="440" height="440" style="flex:0 0 440px">
+            <g transform="translate(150,150) rotate(-90)" fill="none" stroke-width="52">
+              <circle r="104" stroke="var(--pri)"      stroke-dasharray="294 360" pathLength="360"/>
+              <circle r="104" stroke="var(--acc)"      stroke-dasharray="40 360" stroke-dashoffset="-296" pathLength="360"/>
+              <circle r="104" stroke="var(--pri-soft)" stroke-dasharray="22 360" stroke-dashoffset="-338" pathLength="360"/>
+            </g>
+            <text x="150" y="142" text-anchor="middle" font-family="Georgia" font-size="52" font-weight="bold" fill="var(--ink)">82%</text>
+            <text x="150" y="176" text-anchor="middle" font-family="Georgia" font-size="21" fill="var(--ink-soft)">Modern AES</text>
+          </svg>
+          <ul class="pts" style="flex:1;font-size:32px">
+            <li><b>82%</b> — AES &amp; modern ciphers</li>
+            <li style="--d:1"><b>11%</b> — Legacy systems</li>
+            <li><b>7%</b> — Educational / classical</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ٥ وێنەی گەورە + دەق -->
+      <div class="lay" id="L_hero" style="padding:0">
+        <div class="hero"><div class="bgimg"></div><div class="veil"></div>
+          <div class="inner">
+            <div class="h2">Why “Running”?</div><div class="rule"></div>
+            <p>The key text <i>runs</i> alongside the message during encryption.
+               Each letter is encrypted with a different key letter, and the key never repeats.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ٦ دوو ستوون -->
+      <div class="lay" id="L_two">
+        <div class="h2">Encryption vs. Decryption</div><div class="rule"></div>
+        <div class="body"><div class="cols">
+          <div class="col"><h3>Encryption</h3><div class="bar" style="background:var(--pri)"></div>
+            <p>Convert both texts to numbers, add them, then take the result modulo 26.<br><br><b>Cᵢ = ( Pᵢ + Kᵢ ) mod 26</b></p></div>
+          <div class="col"><h3>Decryption</h3><div class="bar" style="background:var(--acc)"></div>
+            <p>Subtract the key numbers from the ciphertext numbers, again modulo 26.<br><br><b>Pᵢ = ( Cᵢ − Kᵢ ) mod 26</b></p></div>
+        </div></div>
+      </div>
+
+      <!-- ٧ هەنگاوەکان -->
+      <div class="lay" id="L_steps">
+        <div class="h2">Encryption Steps</div><div class="rule"></div>
+        <div class="body"><div class="steps">
+          <div class="step"><div class="num">1</div><h4>Prepare</h4><p>Make the plaintext and key text the same length.</p></div>
+          <div class="step"><div class="num">2</div><h4>To Numbers</h4><p>Map each letter to a value: A=0 … Z=25.</p></div>
+          <div class="step"><div class="num">3</div><h4>Add mod 26</h4><p>Add the key value to each plaintext value.</p></div>
+          <div class="step"><div class="num">4</div><h4>To Letters</h4><p>Convert the results back into ciphertext.</p></div>
+        </div></div>
+      </div>
+
+      <!-- ٨ هێڵی کات -->
+      <div class="lay" id="L_time">
+        <div class="h2">Historical Timeline</div><div class="rule"></div>
+        <div class="body"><div class="tl"><div class="line"></div><div class="items">
+          <div class="it"><div class="d"></div><div class="y">1553</div><div class="c">Bellaso describes the autokey idea</div></div>
+          <div class="it"><div class="d"></div><div class="y">1586</div><div class="c">Vigenère publishes his cipher</div></div>
+          <div class="it"><div class="d"></div><div class="y">1863</div><div class="c">Kasiski breaks polyalphabetic ciphers</div></div>
+          <div class="it"><div class="d"></div><div class="y">1917</div><div class="c">One-Time Pad is introduced</div></div>
+        </div></div></div>
+      </div>
+
+      <!-- ٩ خشتە -->
+      <div class="lay" id="L_table">
+        <div class="h2">Worked Example</div><div class="rule"></div>
+        <div class="body"><table class="tb">
+          <tr><th>Step</th><th>Plaintext</th><th>Key</th><th>Result</th></tr>
+          <tr><td>Letters</td><td>D A N G E R</td><td>S A F E G U</td><td>—</td></tr>
+          <tr><td>Numbers</td><td>3 0 13 6 4 17</td><td>18 0 5 4 6 20</td><td>—</td></tr>
+          <tr><td>Sum mod 26</td><td colspan="2">( P + K ) mod 26</td><td>21 0 18 10 10 11</td></tr>
+          <tr><td>Ciphertext</td><td>—</td><td>—</td><td>V A S K K L</td></tr>
+        </table></div>
+      </div>
+
+      <!-- ١٠ ئامارەکان -->
+      <div class="lay" id="L_kpi">
+        <div class="h2">By the Numbers</div><div class="rule"></div>
+        <div class="body"><div class="kpis">
+          <div class="kpi"><div class="v">26<small>×</small></div><div class="k">possible shifts<br>per letter</div></div>
+          <div class="kpi"><div class="v">10<small>^41</small></div><div class="k">key space for a<br>30-letter message</div></div>
+          <div class="kpi"><div class="v">0<small>%</small></div><div class="k">modern production<br>use today</div></div>
+        </div></div>
+      </div>
+
+      <!-- ١١ وتە -->
+      <div class="lay" id="L_quote">
+        <div class="quote"><div class="mk">“</div>
+          <p>A cipher is only as strong as the secrecy of its key,<br>never the secrecy of its method.</p>
+          <div class="by">Auguste Kerckhoffs, 1883</div>
+        </div>
+      </div>
+
+      <!-- ١٢ تۆڕی وێنە -->
+      <div class="lay" id="L_grid">
+        <div class="h2">Visual Overview</div><div class="rule"></div>
+        <div class="body"><div class="grid4">
+          <div class="imgBox"><span>AI IMAGE 1</span></div>
+          <div class="imgBox"><span>AI IMAGE 2</span></div>
+          <div class="imgBox"><span>AI IMAGE 3</span></div>
+          <div class="imgBox"><span>AI IMAGE 4</span></div>
+        </div></div>
+      </div>
+
+      <!-- ١٣ بەشکەر -->
+      <div class="lay" id="L_divider">
+        <div class="divider"><div class="big">02</div><h2>Decryption</h2><div class="rule"></div></div>
+      </div>
+
+      <!-- ١٤ سوپاس -->
+      <div class="lay" id="L_thanks">
+        <div class="thanks"><div class="q">Any Questions?</div>
+          <div class="t">Thank You</div><div class="rule"></div></div>
+      </div>
+
+      <!-- ١٥ سەرچاوەکان -->
+      <div class="lay" id="L_refs">
+        <div class="h2">References</div><div class="rule"></div>
+        <div class="body"><ol class="refs">
+          <li>Stinson, D. R., &amp; Paterson, M. B. (2018). <span class="src">Cryptography: Theory and Practice</span> (4th ed.). CRC Press.</li>
+          <li>Menezes, A., van Oorschot, P., &amp; Vanstone, S. (1996). <span class="src">Handbook of Applied Cryptography</span>. CRC Press.</li>
+          <li>Shannon, C. E. (1949). Communication theory of secrecy systems. <span class="src">Bell System Technical Journal, 28</span>(4), 656–715.</li>
+          <li>NIST. (2001). <span class="src">FIPS 197: Advanced Encryption Standard</span>. csrc.nist.gov</li>
+        </ol></div>
+      </div>
+
+      <!-- ١٦ دەقی درێژ -->
+      <div class="lay" id="L_text">
+        <div class="h2">Introduction</div><div class="rule"></div>
+        <div class="body">
+          <p class="lead">A classical cipher that trades key length for security.</p>
+          <p class="prose">The <b>Running Key Cipher</b> is a form of classical encryption that uses a long
+            passage of ordinary text — a sentence, a paragraph, or an entire book — as its key. Every letter
+            of the message is shifted according to the matching letter of that key text. Because the key is
+            as long as the message and never repeats, the frequency patterns that break simpler ciphers
+            largely disappear, which made it far stronger than the repeating-key methods that came before it.</p>
+        </div>
+      </div>
+
+      <!-- ١٧ وێنە + خاڵ (پێچەوانە) -->
+      <div class="lay" id="L_bulletsL">
+        <div class="h2">How It Works</div><div class="rule"></div>
+        <div class="body"><div class="split">
+          <div class="media"><div class="imgBox"><span>AI IMAGE</span></div></div>
+          <div class="txt"><ul class="pts">
+            <li>Align the key text with the message, letter by letter.</li>
+            <li>Convert both into numbers using A = 0 … Z = 25.</li>
+            <li>Add the pairs together and take the result modulo 26.</li>
+          </ul></div>
+        </div></div>
+      </div>
+
+      <!-- ١٨ سێ ستوون -->
+      <div class="lay" id="L_three">
+        <div class="h2">Three Pillars</div><div class="rule"></div>
+        <div class="body"><div class="three">
+          <div class="c"><div class="ic">01</div><h4>Key Length</h4>
+            <p>The key must be at least as long as the message it protects.</p></div>
+          <div class="c"><div class="ic">02</div><h4>Randomness</h4>
+            <p>Natural language keys still carry statistical structure.</p></div>
+          <div class="c"><div class="ic">03</div><h4>Secrecy</h4>
+            <p>Security depends on the key alone, never on the method.</p></div>
+        </div></div>
+      </div>
+
+      <!-- ١٩ پێناسە -->
+      <div class="lay" id="L_def">
+        <div class="def">
+          <div class="term">Running Key</div>
+          <div class="pron">/ˈrʌnɪŋ kiː/ · noun · cryptography</div>
+          <div class="desc">A key that <i>runs</i> continuously alongside the plaintext,
+            drawn from an ordinary text and never repeated.</div>
+        </div>
+      </div>
+
+      <!-- ٢٠ فۆرموول -->
+      <div class="lay" id="L_code">
+        <div class="h2">The Algorithm</div><div class="rule"></div>
+        <div class="body">
+          <div class="code">
+            <span class="c2"># encryption</span><br>
+            <span class="k">for</span> i <span class="k">in</span> range(len(plaintext)):<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;c[i] = (p[i] + k[i]) % <span class="k">26</span>
+          </div>
+          <div class="formula">Cᵢ = ( Pᵢ + Kᵢ ) mod 26</div>
+        </div>
+      </div>
+
+      <!-- ٢١ باش و خراپ -->
+      <div class="lay" id="L_proscons">
+        <div class="h2">Strengths &amp; Weaknesses</div><div class="rule"></div>
+        <div class="body"><div class="pc">
+          <div class="side good"><h4><span class="b" style="background:#3F8A5F">✓</span>Strengths</h4>
+            <ul><li>No repeating key to detect</li><li>Very large effective key space</li>
+                <li>Simple to teach and to compute by hand</li></ul></div>
+          <div class="side bad"><h4><span class="b" style="background:#A8434B">✕</span>Weaknesses</h4>
+            <ul><li>Key text carries natural-language structure</li>
+                <li>Key must match the message in length</li>
+                <li>Vulnerable to crib-dragging attacks</li></ul></div>
+        </div></div>
+      </div>
+
+      <!-- ٢٢ سوڕ -->
+      <div class="lay" id="L_cycle">
+        <div class="h2">The Cycle</div><div class="rule"></div>
+        <div class="body"><div class="cycle"><div class="ring">
+          <div class="nd n1">Choose<br>key text</div>
+          <div class="nd a n2">Encrypt<br>message</div>
+          <div class="nd n3">Transmit<br>ciphertext</div>
+          <div class="nd a n4">Decrypt<br>with key</div>
+        </div></div></div>
+      </div>
+
+      <!-- ٢٣ هەرەم -->
+      <div class="lay" id="L_pyramid">
+        <div class="h2">Levels of Security</div><div class="rule"></div>
+        <div class="body"><div class="pyr">
+          <div class="lv" style="width:38%;background:var(--acc);color:#141414">One-Time Pad</div>
+          <div class="lv" style="width:62%;background:var(--pri)">Running Key Cipher</div>
+          <div class="lv" style="width:86%;background:var(--pri-soft)">Vigenère &amp; Caesar</div>
+        </div></div>
+      </div>
+
+      <!-- ٢٤ ڤێن -->
+      <div class="lay" id="L_venn">
+        <div class="h2">Shared Ground</div><div class="rule"></div>
+        <div class="body"><div class="venn">
+          <div class="cc" style="background:var(--pri-soft);transform:translateX(-140px);opacity:.85">Running<br>Key</div>
+          <div class="cc" style="background:var(--acc);transform:translateX(140px);opacity:.85">One-Time<br>Pad</div>
+          <div class="mid">Non-repeating<br>key stream</div>
+        </div></div>
+      </div>
+
+      <!-- ٢٥ خشتەی جوڵە -->
+      <div class="lay" id="L_flow">
+        <div class="h2">Process Flow</div><div class="rule"></div>
+        <div class="body"><div class="flow">
+          <div class="bx"><b>INPUT</b>Plaintext<br>message</div>
+          <div class="ar">→</div>
+          <div class="bx"><b>KEY</b>Long natural<br>text passage</div>
+          <div class="ar">→</div>
+          <div class="bx"><b>PROCESS</b>Add and take<br>modulo 26</div>
+          <div class="ar">→</div>
+          <div class="bx"><b>OUTPUT</b>Ciphertext</div>
+        </div></div>
+      </div>
+
+      <!-- ٢٦ چارتی هێڵی -->
+      <div class="lay" id="L_line">
+        <div class="h2">Attack Difficulty</div><div class="rule"></div>
+        <div class="body"><svg viewBox="0 0 1420 520" width="100%" height="100%" font-family="Georgia,serif">
+          <g stroke="#B9C4D4" stroke-width="1.5">
+            <line x1="110" y1="440" x2="1390" y2="440"/>
+            <line x1="110" y1="330" x2="1390" y2="330" stroke-dasharray="7 9" opacity=".5"/>
+            <line x1="110" y1="220" x2="1390" y2="220" stroke-dasharray="7 9" opacity=".5"/>
+            <line x1="110" y1="110" x2="1390" y2="110" stroke-dasharray="7 9" opacity=".5"/>
+          </g>
+          <polyline points="190,400 420,330 650,230 880,150 1110,95 1330,62" fill="none"
+            stroke="var(--pri)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="190,420 420,395 650,370 880,352 1110,340 1330,332" fill="none"
+            stroke="var(--acc)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"
+            stroke-dasharray="16 14"/>
+          <g fill="var(--pri)">
+            <circle cx="190" cy="400" r="11"/><circle cx="420" cy="330" r="11"/>
+            <circle cx="650" cy="230" r="11"/><circle cx="880" cy="150" r="11"/>
+            <circle cx="1110" cy="95" r="11"/><circle cx="1330" cy="62" r="11"/>
+          </g>
+          <g fill="#5B6A83" font-size="24" text-anchor="middle">
+            <text x="190" y="482">10</text><text x="420" y="482">20</text>
+            <text x="650" y="482">40</text><text x="880" y="482">80</text>
+            <text x="1110" y="482">160</text><text x="1330" y="482">320</text>
+          </g>
+          <text x="750" y="514" fill="#5B6A83" font-size="23" text-anchor="middle">message length (letters)</text>
+          <g font-size="24"><rect x="1090" y="150" width="34" height="8" rx="4" fill="var(--pri)"/>
+            <text x="1136" y="160" fill="var(--ink)">Running Key</text>
+            <rect x="1090" y="190" width="34" height="8" rx="4" fill="var(--acc)"/>
+            <text x="1136" y="200" fill="var(--ink)">Vigenère</text></g>
+        </svg></div>
+      </div>
+
+      <!-- ٢٧ بەراورد -->
+      <div class="lay" id="L_compare">
+        <div class="h2">Cipher Comparison</div><div class="rule"></div>
+        <div class="body"><table class="cmp">
+          <tr><th>Property</th><th>Caesar</th><th>Vigenère</th><th>Running Key</th><th>OTP</th></tr>
+          <tr><td>Non-repeating key</td><td class="n">✕</td><td class="n">✕</td><td class="y">✓</td><td class="y">✓</td></tr>
+          <tr><td>Key = message length</td><td class="n">✕</td><td class="n">✕</td><td class="y">✓</td><td class="y">✓</td></tr>
+          <tr><td>Truly random key</td><td class="n">✕</td><td class="n">✕</td><td class="n">✕</td><td class="y">✓</td></tr>
+          <tr><td>Provably unbreakable</td><td class="n">✕</td><td class="n">✕</td><td class="n">✕</td><td class="y">✓</td></tr>
+        </table></div>
+      </div>
+
+      <!-- ٢٨ ڕستەی سەرەکی -->
+      <div class="lay" id="L_state">
+        <div class="state"><p>A cipher is only as strong as<br>the <b>secrecy of its key</b>.</p></div>
+      </div>
+
+      <!-- ٢٩ تیم -->
+      <div class="lay" id="L_team">
+        <div class="h2">Presented By</div><div class="rule"></div>
+        <div class="body"><div class="team">
+          <div class="m"><div class="av">AM</div><div class="nm2">Ali Masoud</div><div class="rl">Introduction &amp; Theory</div></div>
+          <div class="m"><div class="av">SS</div><div class="nm2">Salah Sadeeq</div><div class="rl">Encryption Method</div></div>
+          <div class="m"><div class="av">NS</div><div class="nm2">Nashat Shamsadyn</div><div class="rl">Decryption &amp; Demo</div></div>
+        </div></div>
+      </div>
+
+      <!-- ٣٠ پێوەر -->
+      <div class="lay" id="L_progress">
+        <div class="h2">Resistance Score</div><div class="rule"></div>
+        <div class="body"><div class="bars2">
+          <div class="r"><div class="lbl2"><span>Caesar Cipher</span><span>30%</span></div>
+            <div class="track"><div class="fillb" style="width:30%"></div></div></div>
+          <div class="r"><div class="lbl2"><span>Vigenère Cipher</span><span>42%</span></div>
+            <div class="track"><div class="fillb" style="width:42%"></div></div></div>
+          <div class="r"><div class="lbl2"><span>Running Key Cipher</span><span>70%</span></div>
+            <div class="track"><div class="fillb" style="width:70%"></div></div></div>
+          <div class="r"><div class="lbl2"><span>One-Time Pad</span><span>100%</span></div>
+            <div class="track"><div class="fillb" style="width:100%"></div></div></div>
+        </div></div>
+      </div>
+
+      <!-- ٣١ تۆڕی تایبەتمەندی -->
+      <div class="lay" id="L_icons">
+        <div class="h2">At a Glance</div><div class="rule"></div>
+        <div class="body"><div class="feat">
+          <div class="f2"><div class="ic2">A</div><h5>Alphabet</h5><p>Works on the 26 Latin letters, mapped 0–25.</p></div>
+          <div class="f2"><div class="ic2">K</div><h5>Key Source</h5><p>Any book, article, or long passage of text.</p></div>
+          <div class="f2"><div class="ic2">+</div><h5>Operation</h5><p>Modular addition, subtraction to reverse.</p></div>
+          <div class="f2"><div class="ic2">L</div><h5>Key Length</h5><p>Equal to the plaintext, never repeating.</p></div>
+          <div class="f2"><div class="ic2">!</div><h5>Weakness</h5><p>Natural language leaks statistical structure.</p></div>
+          <div class="f2"><div class="ic2">★</div><h5>Legacy</h5><p>Direct ancestor of the One-Time Pad.</p></div>
+        </div></div>
+      </div>
+
+      <!-- ٣٢ پێش و پاش -->
+      <div class="lay" id="L_ba">
+        <div class="h2">Then &amp; Now</div><div class="rule"></div>
+        <div class="body"><div class="ba">
+          <div class="h"><span class="tg">BEFORE</span><h4>Classical Era</h4>
+            <p>Keys were shared by hand, written in notebooks, and reused far more often
+               than they should have been.</p></div>
+          <div class="h aft"><span class="tg">AFTER</span><h4>Modern Era</h4>
+            <p>AES and RSA generate keys mathematically, exchange them securely,
+               and never depend on natural text.</p></div>
+        </div></div>
+      </div>
+    </div></div>
+
+    <div class="zoom">
+      <button id="zo">−</button><span id="zv">٥٠٪</span><button id="zi">+</button>
+    </div>
+  </div>
+
+  <!-- ═══ ئینسپێکتەر ═══ -->
+  <aside class="insp">
+    <div class="tabs">
+      <button class="tab on" data-p="p1">تەختەبەند</button>
+      <button class="tab" data-p="p2">پاشبنەما</button>
+      <button class="tab" data-p="p3">ناوەڕۆک</button>
+    </div>
+
+    <div class="pane on" id="p1">
+      <div class="grp">هەڵبژاردنی تەختەبەند</div>
+      <div class="gal" id="gal"></div>
+      <div class="hint">هەر تەختەبەندێک <b>ئۆتۆماتیکی</b> ڕەنگی پاشبنەمای ئێستا وەردەگرێت.
+        گۆڕینی تەختەبەند ناوەڕۆکەکە نافەوتێنێت.</div>
+    </div>
+
+    <div class="pane" id="p2">
+      <div class="grp">پاشبنەما ڕووناکەکان</div>
+      <div class="th-grid" id="thLight"></div>
+      <div class="grp">پاشبنەما تاریکەکان</div>
+      <div class="th-grid" id="thDark"></div>
+      <div class="hint">هەموو پاشبنەمایەک تەنها لە <b>٦ ڕەنگ</b> پێکهاتووە.
+        بۆیە زیادکردنی پاشبنەمای نوێ تەنها یەک دێڕ کۆدە — دەتوانین بە دەیان دانە دروست بکەین.</div>
+    </div>
+
+    <div class="pane" id="p3">
+      <div class="grp">دەقی سلایدەکە</div>
+      <div class="f"><label>ناونیشان</label><input id="tTitle" value="Key Features"></div>
+      <div class="f"><label>خاڵەکان</label><textarea id="tBody">High Security: the key text is long and hard to guess.
+Ease of Use: any ordinary paragraph can serve as a key.
+Complexity: an unknown key makes decryption near impossible.</textarea></div>
+      <div class="grp">فۆنت</div>
+      <div class="row">
+        <div class="f"><label>جۆر</label><select id="fFam">
+          <option value="Georgia,serif">Georgia</option>
+          <option value="'Times New Roman',serif">Times New Roman</option>
+          <option value="'Palatino Linotype',serif">Palatino</option>
+          <option value="'Segoe UI',sans-serif">Segoe UI</option>
+          <option value="'Trebuchet MS',sans-serif">Trebuchet</option>
+        </select></div>
+        <div class="f" style="flex:0 0 92px"><label>قەبارە</label><input id="fSize" type="number" value="35"></div>
+      </div>
+      <div class="hint">ئەمە تەنها نموونەیەکی بچووکە. لە <b>ئێدیتەری ڕاستەقینە</b> دا
+        هەموو توخمێک بە کلیک هەڵدەبژێردرێت و دەتوانرێت بجوڵێنرێت، گەورە بکرێت،
+        ڕەنگی بگۆڕدرێت یان بسڕدرێتەوە.</div>
+    </div>
+  </aside>
+</main>
+
+<script>
+const $=id=>document.getElementById(id), $$=s=>document.querySelectorAll(s);
+
+/* ═══ تەختەبەندەکان + وێنەی وایەرفرەیم ═══ */
+const T={t:'#2E3B52',x:'#93A0B5',i:'#C3CCDA',a:'#E0B44F',p:'#5C77BC'};
+const LAYOUTS=[
+ {id:'L_outline',n:'ناوەڕۆک',    w:[[8,7,34,4,'t'],[8,17,36,3.4,'p'],[8,25,36,3.4,'p'],[8,33,36,3.4,'p'],[52,17,36,3.4,'p'],[52,25,36,3.4,'p'],[52,33,36,3.4,'p']]},
+ {id:'L_bullets',n:'خاڵ + وێنە', w:[[8,7,30,4,'t'],[8,17,42,3,'x'],[8,24,42,3,'x'],[8,31,36,3,'x'],[57,15,31,26,'i']]},
+ {id:'L_bar',    n:'چارتی ستوونی',w:[[8,7,30,4,'t'],[14,30,10,12,'p'],[28,24,10,18,'p'],[42,16,10,26,'a'],[56,20,10,22,'p'],[8,43,80,1,'x']]},
+ {id:'L_donut',  n:'چارتی بازنە', w:[[8,7,28,4,'t'],[10,16,26,26,'o'],[46,20,40,3,'x'],[46,27,40,3,'x'],[46,34,30,3,'x']]},
+ {id:'L_hero',   n:'وێنەی گەورە', w:[[0,0,96,50,'i'],[8,16,42,5,'t'],[8,26,44,3,'x'],[8,32,40,3,'x']]},
+ {id:'L_two',    n:'دوو ستوون',   w:[[8,7,38,4,'t'],[8,16,38,26,'b'],[50,16,38,26,'b']]},
+ {id:'L_steps',  n:'هەنگاوەکان',  w:[[8,7,30,4,'t'],[8,16,18,26,'b'],[29,16,18,26,'b'],[50,16,18,26,'b'],[71,16,18,26,'b']]},
+ {id:'L_time',   n:'هێڵی کات',    w:[[8,7,30,4,'t'],[10,28,76,2,'p'],[16,25,7,7,'o'],[36,25,7,7,'o'],[56,25,7,7,'o'],[76,25,7,7,'o']]},
+ {id:'L_table',  n:'خشتە',        w:[[8,7,30,4,'t'],[8,16,80,5,'p'],[8,23,80,4,'x'],[8,29,80,4,'x'],[8,35,80,4,'x']]},
+ {id:'L_kpi',    n:'ئامارەکان',   w:[[8,7,30,4,'t'],[8,17,24,24,'b'],[36,17,24,24,'b'],[64,17,24,24,'b']]},
+ {id:'L_quote',  n:'وتە',         w:[[14,12,10,10,'a'],[14,25,68,4,'t'],[14,32,58,4,'t'],[14,40,22,3,'x']]},
+ {id:'L_grid',   n:'تۆڕی وێنە',   w:[[8,7,30,4,'t'],[8,16,38,12,'i'],[50,16,38,12,'i'],[8,30,38,12,'i'],[50,30,38,12,'i']]},
+ {id:'L_divider',n:'بەشکەر',      w:[[36,12,24,16,'a'],[28,31,40,6,'t'],[42,40,12,2,'p']]},
+ {id:'L_thanks', n:'سوپاس',       w:[[34,14,28,4,'x'],[22,23,52,10,'t'],[42,38,12,2,'a']]},
+ {id:'L_refs',   n:'سەرچاوەکان',  w:[[8,7,30,4,'t'],[8,16,78,2.6,'x'],[8,22,74,2.6,'x'],[8,28,80,2.6,'x'],[8,34,70,2.6,'x'],[8,40,76,2.6,'x']]},
+ {id:'L_text',   n:'دەقی درێژ',   w:[[8,7,30,4,'t'],[8,16,60,3.4,'p'],[8,24,80,2.6,'x'],[8,29,80,2.6,'x'],[8,34,80,2.6,'x'],[8,39,62,2.6,'x']]},
+ {id:'L_bulletsL',n:'وێنە + خاڵ', w:[[8,7,30,4,'t'],[8,15,31,26,'i'],[46,17,42,3,'x'],[46,24,42,3,'x'],[46,31,36,3,'x']]},
+ {id:'L_three',  n:'سێ ستوون',    w:[[8,7,30,4,'t'],[8,16,25,26,'b'],[36,16,25,26,'b'],[64,16,25,26,'b']]},
+ {id:'L_def',    n:'پێناسە',      w:[[8,14,46,8,'t'],[8,25,26,2.6,'x'],[8,32,3,12,'a'],[15,33,64,3,'x'],[15,39,52,3,'x']]},
+ {id:'L_code',   n:'فۆرموول',     w:[[8,7,30,4,'t'],[8,16,80,18,'b'],[30,38,36,5,'p']]},
+ {id:'L_proscons',n:'باش و خراپ', w:[[8,7,34,4,'t'],[8,16,38,26,'b'],[50,16,38,26,'b'],[12,20,14,3,'p'],[54,20,14,3,'a']]},
+ {id:'L_cycle',  n:'سوڕ',         w:[[8,7,30,4,'t'],[34,14,28,28,'o'],[42,10,12,7,'p'],[42,38,12,7,'p'],[26,24,12,7,'a'],[58,24,12,7,'a']]},
+ {id:'L_pyramid',n:'هەرەم',       w:[[8,7,30,4,'t'],[34,15,28,7,'a'],[26,24,44,7,'p'],[16,33,64,7,'i']]},
+ {id:'L_venn',   n:'ڤێن',         w:[[8,7,30,4,'t'],[26,16,26,26,'o'],[44,16,26,26,'o']]},
+ {id:'L_flow',   n:'خشتەی جوڵە',  w:[[8,7,32,4,'t'],[8,22,17,14,'b'],[28,22,17,14,'b'],[48,22,17,14,'b'],[68,22,17,14,'b']]},
+ {id:'L_line',   n:'چارتی هێڵی',  w:[[8,7,30,4,'t'],[10,40,78,1.4,'x'],[12,34,16,1.6,'p'],[28,26,18,1.6,'p'],[46,20,20,1.6,'p'],[66,16,20,1.6,'p'],[12,38,74,1.4,'a']]},
+ {id:'L_compare',n:'بەراوردکردن', w:[[8,7,34,4,'t'],[8,16,80,5,'p'],[8,23,80,4,'x'],[8,29,80,4,'x'],[8,35,80,4,'x'],[8,41,80,4,'x']]},
+ {id:'L_state',  n:'ڕستەی سەرەکی',w:[[16,18,64,6,'t'],[24,28,48,6,'t']]},
+ {id:'L_team',   n:'تیم',         w:[[8,7,30,4,'t'],[18,18,16,16,'o'],[40,18,16,16,'o'],[62,18,16,16,'o'],[18,38,16,2.4,'x'],[40,38,16,2.4,'x'],[62,38,16,2.4,'x']]},
+ {id:'L_progress',n:'پێوەر',      w:[[8,7,30,4,'t'],[8,17,50,3.4,'p'],[8,24,66,3.4,'a'],[8,31,40,3.4,'p'],[8,38,78,3.4,'a']]},
+ {id:'L_icons',  n:'تایبەتمەندی', w:[[8,7,30,4,'t'],[8,16,25,12,'b'],[36,16,25,12,'b'],[64,16,25,12,'b'],[8,30,25,12,'b'],[36,30,25,12,'b'],[64,30,25,12,'b']]},
+ {id:'L_ba',     n:'پێش و پاش',   w:[[8,7,30,4,'t'],[8,16,40,26,'b'],[48,16,40,26,'p']]}
+];
+const FILL={t:T.t,x:T.x,i:T.i,a:T.a,p:T.p,b:'#DEE5EF',o:T.p};
+
+function wire(w,W=96,H=50){
+  let s=`<svg viewBox="0 0 ${W} ${H}">`;
+  for(const[x,y,ww,hh,k]of w){
+    if(k==='o') s+=`<circle cx="${x+ww/2}" cy="${y+hh/2}" r="${ww/2}" fill="none" stroke="${FILL[k]}" stroke-width="${Math.max(1.6,ww/5)}"/>`;
+    else s+=`<rect x="${x}" y="${y}" width="${ww}" height="${hh}" rx="${Math.min(2.2,hh/2)}" fill="${FILL[k]}" ${k==='b'?'stroke="#C6D0DE" stroke-width=".7"':''}/>`;
+  }
+  return s+'</svg>';
+}
+
+/* گەلەری + لیستی سلایدەکان */
+$('gal').innerHTML = LAYOUTS.map((l,i)=>
+  `<button class="lay-card${i===0?' on':''}" data-id="${l.id}">${wire(l.w)}<div class="nm">${l.n}</div></button>`).join('');
+$('thumbs').innerHTML = LAYOUTS.map((l,i)=>
+  `<div class="thumb${i===0?' on':''}" data-id="${l.id}"><div class="n">${i+1}</div>${wire(l.w)}<div class="cap">${l.n}</div></div>`).join('');
+$('cnt').textContent = LAYOUTS.length;
+$('crumb').textContent = `Running Key Cipher — ${LAYOUTS.length} سلاید`;
+
+function pick(id){
+  $$('.lay').forEach(x=>x.classList.remove('on'));
+  $(id).classList.add('on');
+  $$('.lay-card').forEach(x=>x.classList.toggle('on',x.dataset.id===id));
+  $$('.thumb').forEach(x=>x.classList.toggle('on',x.dataset.id===id));
+  /* تەختەبەندی وێنەی گەورە کارتی شووشەیی ناوێت */
+  $('glassCard').style.opacity = (id==='L_hero') ? '0' : '1';
+}
+$$('.lay-card,.thumb').forEach(b=>b.onclick=()=>pick(b.dataset.id));
+
+/* ═══ تابەکان ═══ */
+$$('.tab').forEach(t=>t.onclick=()=>{
+  $$('.tab').forEach(x=>x.classList.remove('on'));
+  $$('.pane').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on'); $(t.dataset.p).classList.add('on');
+});
+
+/* ═══ پاشبنەماکان ═══ */
+const THEMES=[
+ {n:'شینی ئەکادیمی', d:0, v:{'--slide-bg':'#DFE4EA','--ink':'#0A0A0A','--ink-soft':'#4A5568','--pri':'#5C77BC','--pri-soft':'#8FA0D2','--acc':'#EFC45E','--glass':'rgba(255,255,255,.42)','--glass-line':'rgba(255,255,255,.62)'}},
+ {n:'شینی ناوەڕاست', d:0, v:{'--slide-bg':'#E4EAF2','--ink':'#0C1A2E','--ink-soft':'#3C5A7A','--pri':'#1F4E79','--pri-soft':'#7E9CC0','--acc':'#D9A441','--glass':'rgba(255,255,255,.5)','--glass-line':'rgba(255,255,255,.72)'}},
+ {n:'سەوزی سروشتی',  d:0, v:{'--slide-bg':'#E4EBE4','--ink':'#10241A','--ink-soft':'#42604F','--pri':'#3F7D5C','--pri-soft':'#93BCA5','--acc':'#E0AC46','--glass':'rgba(255,255,255,.46)','--glass-line':'rgba(255,255,255,.7)'}},
+ {n:'سووری زانکۆ',   d:0, v:{'--slide-bg':'#EEE6E6','--ink':'#210E0E','--ink-soft':'#5E3B3B','--pri':'#8E2F3A','--pri-soft':'#C79098','--acc':'#D4A24C','--glass':'rgba(255,255,255,.48)','--glass-line':'rgba(255,255,255,.72)'}},
+ {n:'مۆری ئەکادیمی', d:0, v:{'--slide-bg':'#E9E6F0','--ink':'#180F26','--ink-soft':'#4B3D63','--pri':'#5B4B8A','--pri-soft':'#A398C6','--acc':'#E2B455','--glass':'rgba(255,255,255,.46)','--glass-line':'rgba(255,255,255,.7)'}},
+ {n:'برۆنزی کلاسیک', d:0, v:{'--slide-bg':'#F0EAE0','--ink':'#241B10','--ink-soft':'#5C4B33','--pri':'#8A6A3E','--pri-soft':'#C2A97F','--acc':'#3E6B7A','--glass':'rgba(255,255,255,.5)','--glass-line':'rgba(255,255,255,.75)'}},
+ {n:'تەکنیکی سیان',  d:0, v:{'--slide-bg':'#E0EAEC','--ink':'#08201F','--ink-soft':'#37585A','--pri':'#1E6E72','--pri-soft':'#86B3B5','--acc':'#E2A03F','--glass':'rgba(255,255,255,.48)','--glass-line':'rgba(255,255,255,.72)'}},
+ {n:'شەوانەی شین',   d:1, v:{'--slide-bg':'#141C2B','--ink':'#F1F5FB','--ink-soft':'#A7B4C9','--pri':'#7C95E0','--pri-soft':'#3E4E75','--acc':'#E9B54B','--glass':'rgba(255,255,255,.06)','--glass-line':'rgba(255,255,255,.14)'}},
+ {n:'شەوانەی ڕەش',   d:1, v:{'--slide-bg':'#111112','--ink':'#F5F3EE','--ink-soft':'#A9A49A','--pri':'#C9A54E','--pri-soft':'#4A4235','--acc':'#E8D9A8','--glass':'rgba(255,255,255,.05)','--glass-line':'rgba(255,255,255,.12)'}},
+ {n:'شەوانەی سەوز',  d:1, v:{'--slide-bg':'#101E19','--ink':'#EDF5F0','--ink-soft':'#9DB8AB','--pri':'#4FA97C','--pri-soft':'#2C4A3C','--acc':'#E0B052','--glass':'rgba(255,255,255,.055)','--glass-line':'rgba(255,255,255,.13)'}},
+ {n:'شەوانەی مۆر',   d:1, v:{'--slide-bg':'#171327','--ink':'#F2EFFA','--ink-soft':'#AEA3C6','--pri':'#8E7BD8','--pri-soft':'#3E3559','--acc':'#E5B657','--glass':'rgba(255,255,255,.06)','--glass-line':'rgba(255,255,255,.14)'}},
+ {n:'شەوانەی خۆڵەمێش',d:1,v:{'--slide-bg':'#1A1D22','--ink':'#EEF1F5','--ink-soft':'#A3ABB8','--pri':'#6E8BA8','--pri-soft':'#3A444F','--acc':'#D8A657','--glass':'rgba(255,255,255,.055)','--glass-line':'rgba(255,255,255,.13)'}},
+
+ {n:'تەلای زانکۆ',   d:0, v:{'--slide-bg':'#E8EAF0','--ink':'#0B1533','--ink-soft':'#3A456B','--pri':'#122B60','--pri-soft':'#8892B8','--acc':'#C9A227','--glass':'rgba(255,255,255,.52)','--glass-line':'rgba(255,255,255,.78)'}},
+ {n:'ئاسمانی ڕووناک',d:0, v:{'--slide-bg':'#E6F0F7','--ink':'#0A2233','--ink-soft':'#3E6076','--pri':'#2E7FA8','--pri-soft':'#93C2DA','--acc':'#EFAE4E','--glass':'rgba(255,255,255,.5)','--glass-line':'rgba(255,255,255,.76)'}},
+ {n:'دەریایی',      d:0, v:{'--slide-bg':'#DFEDEC','--ink':'#062522','--ink-soft':'#365E5A','--pri':'#136F63','--pri-soft':'#84B8B1','--acc':'#E8A33D','--glass':'rgba(255,255,255,.48)','--glass-line':'rgba(255,255,255,.74)'}},
+ {n:'زەیتوونی',      d:0, v:{'--slide-bg':'#EAEBDF','--ink':'#1D2210','--ink-soft':'#4F5834','--pri':'#6B7A3A','--pri-soft':'#B2BC8C','--acc':'#C8622F','--glass':'rgba(255,255,255,.5)','--glass-line':'rgba(255,255,255,.76)'}},
+ {n:'قاوەیی گەرم',   d:0, v:{'--slide-bg':'#EFE7E0','--ink':'#241812','--ink-soft':'#5C4638','--pri':'#7B4B2E','--pri-soft':'#C4A18B','--acc':'#3F7A6E','--glass':'rgba(255,255,255,.52)','--glass-line':'rgba(255,255,255,.78)'}},
+ {n:'پەمەیی نەرم',   d:0, v:{'--slide-bg':'#F2E8EA','--ink':'#26141A','--ink-soft':'#5E3F49','--pri':'#A34E68','--pri-soft':'#D9A8B6','--acc':'#3E6F7E','--glass':'rgba(255,255,255,.54)','--glass-line':'rgba(255,255,255,.8)'}},
+ {n:'خۆڵەمێشی مۆدێرن',d:0,v:{'--slide-bg':'#ECEEF1','--ink':'#15181C','--ink-soft':'#4C525B','--pri':'#3C4650','--pri-soft':'#A2AAB4','--acc':'#D9873F','--glass':'rgba(255,255,255,.56)','--glass-line':'rgba(255,255,255,.82)'}},
+ {n:'نارنجی گەرم',   d:0, v:{'--slide-bg':'#F3EBE2','--ink':'#291708','--ink-soft':'#634728','--pri':'#C4661F','--pri-soft':'#E3B389','--acc':'#2F6076','--glass':'rgba(255,255,255,.54)','--glass-line':'rgba(255,255,255,.8)'}},
+
+ {n:'شەوانەی نیلی',  d:1, v:{'--slide-bg':'#0F1230','--ink':'#EEF0FF','--ink-soft':'#A2A8D0','--pri':'#7B7BE8','--pri-soft':'#343A6E','--acc':'#E7C15A','--glass':'rgba(255,255,255,.06)','--glass-line':'rgba(255,255,255,.14)'}},
+ {n:'شەوانەی دەریایی',d:1,v:{'--slide-bg':'#0C1F1F','--ink':'#E9F5F3','--ink-soft':'#93B9B4','--pri':'#3FA79A','--pri-soft':'#28504C','--acc':'#E4AF4E','--glass':'rgba(255,255,255,.055)','--glass-line':'rgba(255,255,255,.13)'}},
+ {n:'شەوانەی سووری تۆخ',d:1,v:{'--slide-bg':'#1E1214','--ink':'#F7EDEE','--ink-soft':'#BFA1A5','--pri':'#C25460','--pri-soft':'#573035','--acc':'#DDB25C','--glass':'rgba(255,255,255,.055)','--glass-line':'rgba(255,255,255,.13)'}},
+ {n:'شەوانەی قاوەیی',d:1, v:{'--slide-bg':'#1C1712','--ink':'#F4EFE7','--ink-soft':'#B9AA97','--pri':'#B08251','--pri-soft':'#4A3B2C','--acc':'#8FBF9B','--glass':'rgba(255,255,255,.05)','--glass-line':'rgba(255,255,255,.12)'}}
+];
+
+function themeCard(t,i){
+  return `<button class="th-card" data-i="${i}">
+    <div class="th-prev" style="background:${t.v['--slide-bg']}">
+      <i style="width:26px;height:26px;left:9px;top:13px;background:${t.v['--pri']}"></i>
+      <i style="width:20px;height:20px;left:40px;top:8px;background:${t.v['--acc']};border-radius:7px"></i>
+      <i style="width:15px;height:15px;left:38px;top:30px;background:${t.v['--pri-soft']}"></i>
+      <i style="width:44px;height:8px;right:9px;top:22px;background:${t.v['--ink']};opacity:.55;border-radius:4px"></i>
+    </div><div class="nm">${t.n}</div></button>`;
+}
+$('thLight').innerHTML = THEMES.map((t,i)=>t.d?'':themeCard(t,i)).join('');
+$('thDark').innerHTML  = THEMES.map((t,i)=>t.d?themeCard(t,i):'').join('');
+
+$$('.th-card').forEach(b=>b.onclick=()=>{
+  $$('.th-card').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  Object.entries(THEMES[+b.dataset.i].v).forEach(([k,v])=>
+    document.documentElement.style.setProperty(k,v));
+});
+document.querySelector('.th-card').classList.add('on');
+
+/* ═══ پانێلی ناوەڕۆک ═══ */
+$('tTitle').oninput = e => $('L_bullets').querySelector('.h2').textContent = e.target.value;
+$('tBody').oninput  = e => {
+  const ul = $('L_bullets').querySelector('ul.pts');
+  ul.innerHTML = e.target.value.split('\n').filter(Boolean).map(l=>{
+    const i = l.indexOf(':');
+    return i>0 ? `<li><b>${l.slice(0,i+1)}</b>${l.slice(i+1)}</li>` : `<li>${l}</li>`;
+  }).join('');
+};
+const applyFont = () => {
+  const ul = $('L_bullets').querySelector('ul.pts');
+  ul.style.fontFamily = $('fFam').value;
+  ul.style.fontSize   = $('fSize').value + 'px';
+};
+$('fFam').onchange = applyFont; $('fSize').oninput = applyFont;
+
+/* ═══ زووم ═══ */
+let auto=true, z=.5;
+const AR = n => String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+function apply(){
+  const st=$('stage');
+  st.style.transform=`scale(${z})`;
+  st.parentElement.style.width=(1920*z)+'px';
+  st.parentElement.style.height=(1080*z)+'px';
+  $('zv').textContent = AR(Math.round(z*100))+'٪';
+}
+function fit(){
+  if(!auto) return;
+  const w=innerWidth-186-308-52, h=innerHeight-58-52;
+  z=Math.min(w/1920,h/1080); apply();
+}
+$('zi').onclick=()=>{auto=false; z=Math.min(1.5,z+.1); apply()};
+$('zo').onclick=()=>{auto=false; z=Math.max(.15,z-.1); apply()};
+addEventListener('resize',fit); fit();
+</script>
+</body>
+</html>

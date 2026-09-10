@@ -1,0 +1,72 @@
+{
+  "hosting": {
+    "//": "ناسنامەی سایتەکە = ناوی دۆمەین. سایتی بنەڕەتی پرۆژەکە ناوی ناگۆڕدرێت، بۆیە سایتێکی کورتتر زیاد کراوە. هەردووکیان هەمان ناوەڕۆک خزمەت دەکەن.",
+    "site": "iosbb1",
+    "public": "out",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "cleanUrls": false,
+    "trailingSlash": true,
+    "headers": [
+      {
+        "//": "سەرپەڕەی سەلامەتی بۆ هەموو داواکارییەک. بۆچی گرنگە لێرەدا: کلیلەکانی API لە `localStorage` دا دەژین (C2/C5)، بۆیە یەک XSS ـی سەرکەوتوو = دزینی کلیلی هەموو بەکارهێنەرێک. `script-src` ڕێگە لە بارکردنی هیچ سکریپتێکی دەرەکی دەگرێت، کە ڕێچکەی سەرەکی ئەو هێرشەیە.",
+        "source": "**",
+        "headers": [
+          {
+            "//": "'unsafe-inline' بۆ سکریپت پێویستە: Next.js لە دەرهێنانی ساکاردا سکریپتی ناوەکی دەنووسێت بۆ hydration، و nonce لەسەر میوانداری ڕەق ناکرێت. بەڵام هۆستی دەرەکی بەتەواوی ڕێگری لێکراوە. connect-src کراوەیە چونکە بەکارهێنەر خۆی دابینکەری هەڵدەبژێرێت، و وێنەکانی Openverse لە دەیان هۆستی جیاوازەوە دێن.",
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; upgrade-insecure-requests"
+          },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+          {
+            "//": "ئەپەکە هیچ کامێرا و مایکرۆفۆن و شوێنێکی ناوێت. داخستنیان مانای ئەوەیە کە تەنانەت کۆدێکی تێچووش ناتوانێت داوایان بکات.",
+            "key": "Permissions-Policy",
+            "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+          },
+          { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
+          { "key": "X-Frame-Options", "value": "DENY" }
+        ]
+      },
+      {
+        "//": "کارکەری خزمەتگوزاری هەرگیز نابێت کاش بکرێت. ئەگەر بکرێت، وەشانێکی کۆنی ئەپەکە بۆ هەفتەیەک دەمێنێتەوە و نوێکردنەوە ناگاتە بەکارهێنەر.",
+        "source": "/sw.js",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        ]
+      },
+      {
+        "//": "ناوی ئەم فایلانە hash ـیان تێدایە — ناوەڕۆکیان هەرگیز ناگۆڕێت، بۆیە بۆ ساڵێک کاش دەکرێن.",
+        "source": "/_next/static/**",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        ]
+      },
+      {
+        "source": "**/*.@(woff|woff2|ttf|otf)",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        ]
+      },
+      {
+        "//": "لاپەڕەکە خۆی — هەمیشە پشکنین دەکرێت، بۆیە بەکارهێنەر بەستەی نوێ دەبینێت. ئاگاداری: `/index.html` بەتەنها بەس نییە — Firebase ڕەگەکە وەک `/` خزمەت دەکات، بۆیە هەردووکیان پێویستن.",
+        "source": "/",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache" }
+        ]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache" }
+        ]
+      },
+      {
+        "source": "/manifest.webmanifest",
+        "headers": [
+          { "key": "Content-Type", "value": "application/manifest+json; charset=utf-8" },
+          { "key": "Cache-Control", "value": "public, max-age=3600" }
+        ]
+      }
+    ]
+  }
+}
